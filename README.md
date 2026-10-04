@@ -1,6 +1,6 @@
-# Attention Plugin for Claude
+# Attention Plugin
 
-Claude Code plugin that connects Claude to [Attention](https://www.attention.com) — an AI-powered conversational intelligence platform that records calls, transcribes, and analyzes sales conversations.
+Plugin for Claude Code and Grok Build that connects your coding agent to [Attention](https://www.attention.com) — an AI-powered conversational intelligence platform that records calls, transcribes, and analyzes sales conversations.
 
 ## What's Included
 
@@ -30,6 +30,12 @@ Then authenticate:
 ```
 
 Select "attention" and complete the OAuth flow in your browser.
+
+### Grok Build
+
+In Grok Build, open `/plugin`, search for **Attention**, and install. On first connect, sign in with your Attention account to complete the OAuth flow in your browser.
+
+Grok Build reads the same plugin files as Claude Code (`.claude-plugin/plugin.json`, `.mcp.json`, `skills/`), so there's nothing extra to configure.
 
 ## Available MCP Tools
 
@@ -87,8 +93,11 @@ attention/
 | Scopes | `mcp:read`, `mcp:write` |
 | OAuth Discovery | `https://api.attention.tech/.well-known/oauth-authorization-server` |
 
+The plugin only talks to `api.attention.tech`. It needs no API key and reads no local files or environment variables: you sign in with your Attention account and the agent acts as that account (scopes `mcp:read`, `mcp:write`).
+
 ## Documentation
 
 - [Attention MCP Server Docs](https://docs.attention.com/attention-mcp-server)
 - [Claude Code Plugins Docs](https://code.claude.com/docs/en/plugins)
+- [xAI Plugin Marketplace](https://github.com/xai-org/plugin-marketplace)
 - [MCP Specification](https://modelcontextprotocol.io/)

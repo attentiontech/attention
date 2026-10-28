@@ -1,6 +1,6 @@
 # Attention Plugin
 
-Plugin for Claude Code and Grok Build that connects your coding agent to [Attention](https://www.attention.com) — an AI-powered conversational intelligence platform that records calls, transcribes, and analyzes sales conversations.
+Plugin for Claude Code, Grok Build, ChatGPT, and Codex that connects your assistant to [Attention](https://www.attention.com) — an AI-powered conversational intelligence platform that records calls, transcribes, and analyzes sales conversations.
 
 ## What's Included
 
@@ -9,15 +9,17 @@ This plugin provides:
 - **MCP Server Connection** — Connects to Attention's remote MCP server at `https://api.attention.tech/mcp` with OAuth 2.0 authentication
 - **Skills** — Agent skills for searching conversations and getting AI-powered insights
 
+The OpenAI package reuses `.claude-plugin/plugin.json`, `.mcp.json`, and `skills/`. OpenAI-specific metadata, the icon, and the packaging script live in `.openai-plugin/`.
+
 ## Installation
 
-### From the Official Marketplace
+### Claude Code: official marketplace
 
 ```
 /plugin install attention
 ```
 
-### Local Testing
+### Claude Code: local testing
 
 ```bash
 claude --plugin-dir ./path/to/attention
@@ -37,9 +39,19 @@ In Grok Build, open `/plugin`, search for **Attention**, and install. On first c
 
 Grok Build reads the same plugin files as Claude Code (`.claude-plugin/plugin.json`, `.mcp.json`, `skills/`), so there's nothing extra to configure.
 
+### ChatGPT and Codex
+
+Build the package with Python 3.9 or later:
+
+```bash
+python3 .openai-plugin/build.py
+```
+
+This creates `.openai-plugin/dist/attention-openai-<version>.zip` with the shared metadata, MCP connection, skills, and license. The script adds the OpenAI metadata and icon and translates the HTTP transport name to `streamable-http`. Use the generated ZIP for [OpenAI's supported package layout](https://developers.openai.com/plugins/build/plugins); `.openai-plugin/` is the source folder.
+
 ## Available MCP Tools
 
-Tools are discovered dynamically from the server at connection time. Run `/mcp` in Claude Code to see all available tools, or check the [Attention MCP Server Docs](https://docs.attention.com/attention-mcp-server) for the full reference.
+Tools are discovered dynamically from the server at connection time. Run `/mcp` in Claude Code to see all available tools, or check the [Attention MCP Server Docs](https://docs.attention.com/mcp/overview) for the full reference.
 
 ## Plugin Structure
 
@@ -48,9 +60,14 @@ attention/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest (name, version, metadata)
 ├── .mcp.json                # MCP server configuration (remote HTTP)
+├── .openai-plugin/
+│   ├── manifest-overlay.json # OpenAI presentation metadata
+│   ├── assets/
+│   │   └── attention-icon.png
+│   └── build.py              # Packages the shared sources for OpenAI
 ├── skills/
 │   └── conversations/
-│       └── SKILL.md         # Skill for searching, browsing, and analyzing conversations
+│       └── SKILL.md         # Shared conversation skill
 └── README.md
 ```
 
@@ -97,7 +114,7 @@ The plugin only talks to `api.attention.tech`. It needs no API key and reads no 
 
 ## Documentation
 
-- [Attention MCP Server Docs](https://docs.attention.com/attention-mcp-server)
+- [Attention MCP Server Docs](https://docs.attention.com/mcp/overview)
 - [Claude Code Plugins Docs](https://code.claude.com/docs/en/plugins)
 - [xAI Plugin Marketplace](https://github.com/xai-org/plugin-marketplace)
 - [MCP Specification](https://modelcontextprotocol.io/)

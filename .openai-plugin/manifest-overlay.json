@@ -1,0 +1,22 @@
+{
+  "description": "Search and analyze sales conversations in your Attention workspace.",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Attention",
+        "shortDescription": "Analyze sales conversations",
+        "longDescription": "Search calls, read transcripts, review scorecards, and analyze sales conversations using your connected Attention account.",
+        "developerName": "Attention",
+        "category": "Productivity",
+        "capabilities": [
+          "Search calls",
+          "Read transcripts",
+          "Analyze conversations",
+          "Review scorecards"
+        ],
+        "composerIcon": "./assets/attention-icon.png",
+        "logo": "./assets/attention-icon.png"
+      }
+    }
+  }
+}

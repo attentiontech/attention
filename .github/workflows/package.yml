@@ -1,0 +1,35 @@
+name: Plugin packages
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Install pinned validators
+        run: |
+          python -m pip install -r .openai-plugin/requirements.txt
+          npm install --global @anthropic-ai/claude-code@2.1.273
+      - name: Build both formats and compare a second build
+        run: python -m unittest discover -s .openai-plugin -p 'test_*.py'
+      - name: Validate exact archives and report remaining submission inputs
+        run: |
+          python .openai-plugin/validate.py .openai-plugin/dist/attention-claude-*.zip .openai-plugin/dist/attention-openai-*.zip > .openai-plugin/dist/validation.json
+          cat .openai-plugin/dist/validation.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: attention-plugin-packages
+          path: .openai-plugin/dist/

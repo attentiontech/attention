@@ -1,7 +1,7 @@
 {
   "name": "attention",
   "description": "Connect Claude to Attention — search sales conversations, view calls transcripts, get AI-powered insights, and chat with the Attention super agent.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": {
     "name": "Attention",
     "email": "team@attention.tech",

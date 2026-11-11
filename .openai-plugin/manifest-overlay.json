@@ -15,7 +15,25 @@
           "Review scorecards"
         ],
         "composerIcon": "./assets/attention-icon.png",
-        "logo": "./assets/attention-icon.png"
+        "logo": "./assets/attention-icon.png",
+        "websiteURL": "https://docs.attention.com/mcp/overview",
+        "privacyPolicyURL": "https://attention.com/privacy-policy",
+        "termsOfServiceURL": "https://attention.com/terms-of-use",
+        "defaultPrompt": [
+          "Find my sales calls from last week.",
+          "Summarize the main objections in my recent calls.",
+          "Show the scorecards available to my team."
+        ]
+      },
+      "review": {
+        "prompts": [
+          "Find my sales calls from last week.",
+          "Summarize the main objections in my recent calls.",
+          "Show the scorecards available to my team."
+        ]
+      },
+      "publication": {
+        "release_notes": "Package Attention for Claude and ChatGPT from shared sources, declare OAuth DCR for OpenAI, and permit grounded summaries of super-agent responses."
       }
     }
   }

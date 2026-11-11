@@ -41,13 +41,51 @@ Grok Build reads the same plugin files as Claude Code (`.claude-plugin/plugin.js
 
 ### ChatGPT and Codex
 
-Build the package with Python 3.9 or later:
+Build both packages with Python 3.11 or later:
 
 ```bash
 python3 .openai-plugin/build.py
 ```
 
-This creates `.openai-plugin/dist/attention-openai-<version>.zip` with the shared metadata, MCP connection, skills, and license. The script adds the OpenAI metadata and icon and translates the HTTP transport name to `streamable-http`. Use the generated ZIP for [OpenAI's supported package layout](https://developers.openai.com/plugins/build/plugins); `.openai-plugin/` is the source folder.
+This creates two archives under `.openai-plugin/dist/`:
+
+- `attention-claude-<version>.zip` preserves the Claude layout, HTTP connection, skill, license and README.
+- `attention-openai-<version>.zip` contains root `plugin.json`, `mcp.json`, the same skill and license, and the OpenAI icon.
+
+The OpenAI connection declares OAuth Dynamic Client Registration (DCR) and the existing `mcp:read` and `mcp:write` scopes. Authentication endpoints come from production discovery. No credentials or fixed tokens are packaged. Unchanged source files produce byte-identical archives.
+
+### Package validation
+
+Install Python 3.11+, Node.js 22 and the pinned validators:
+
+```bash
+python3 -m venv .openai-plugin/.venv
+source .openai-plugin/.venv/bin/activate
+python3 -m pip install -r .openai-plugin/requirements.txt
+npm install --global @anthropic-ai/claude-code@2.1.273
+python3 -m unittest discover -s .openai-plugin -p 'test_*.py'
+python3 .openai-plugin/validate.py .openai-plugin/dist/attention-claude-1.1.1.zip .openai-plugin/dist/attention-openai-1.1.1.zip
+```
+
+The regression command builds the deliverable archives and compares them with one second build in a temporary directory. The validator inspects the actual ZIPs, validates portable JSON using pinned local schemas, checks OpenAI OAuth and listing fields, inspects the icon, and runs `claude plugin validate --strict` on the extracted Claude package. These checks make no OAuth or MCP requests. CI uses the same commands and uploads the two ZIPs with its validation report.
+
+The portable MCP schema does not describe OpenAI server extensions. Validation retains the upstream schema and adds the documented OAuth declaration to its in-memory validation schema. See `.openai-plugin/schemas/README.md` for source URLs and checksums.
+
+### Submission preparation remains incomplete
+
+Package validation is separate from public-submission readiness. Add `--submission` to the validation command to fail when required package review fields are missing.
+
+The listing uses the published MCP overview, privacy policy and terms URLs, verified on November 11, 2026. The publisher must confirm that its privacy policy and terms cover the submitted integration. These items still need completion:
+
+- A verified HTTPS support page with a working support contact.
+- Exactly five positive and three negative reviewer cases with the final demo data, expected tools and results; run them with the reviewer account. The manifest's optional review prompts are not those cases.
+- An accessible recording of the actual submitted functionality.
+- Verified publisher identity, country availability and any applicable commerce declaration.
+- Reviewer credentials in the portal's private fields, plus domain verification, a current tool scan and policy attestations.
+
+Do not put reviewer credentials in either archive. No country restriction or commerce behavior is declared without publisher confirmation.
+
+For host acceptance, extract the Claude archive and load it with `claude --plugin-dir <extracted-directory>`. Confirm `attention:conversations` is discoverable, then complete OAuth and run a read-only search with a permitted sample account. Load the OpenAI archive in the intended ChatGPT/Codex host and repeat skill discovery and the same read-only scenario. Archive validation does not prove these authenticated host checks or OpenAI approval.
 
 ## Available MCP Tools
 
